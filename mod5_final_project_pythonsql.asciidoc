@@ -1,0 +1,662 @@
+Assignment: Notebook for Graded Assessment
+
+== Introduction
+
+Using this Python notebook you will:
+
+[arabic]
+. Understand three Chicago datasets
+. Load the three datasets into three tables in a SQLIte database
+. Execute SQL queries to answer assignment questions
+
+=== Understand the datasets
+
+To complete the assignment problems in this notebook you will be using
+three datasets that are available on the city of Chicago’s Data Portal:
+
+[arabic]
+. Socioeconomic Indicators in Chicago
+. Chicago Public Schools
+. Chicago Crime Data
+
+==== 1. Socioeconomic Indicators in Chicago
+
+This dataset contains a selection of six socioeconomic indicators of
+public health significance and a "`hardship index,`" for each Chicago
+community area, for the years 2008 – 2012.
+
+A detailed description of this dataset and the original dataset can be
+obtained from the Chicago Data Portal at:
+
+https://data.cityofchicago.org/Health-Human-Services/Census-Data-Selected-socioeconomic-indicators-in-C/kn9c-c2s2?utm_medium=Exinfluencer&utm_source=Exinfluencer&utm_content=000026UJ&utm_term=10006555&utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMDeveloperSkillsNetworkDB0201ENSkillsNetwork20127838-2021-01-01&cm_mmc=Email_Newsletter-_-Developer_Ed%2BTech-_-WW_WW-_-SkillsNetwork-Courses-IBMDeveloperSkillsNetwork-DB0201EN-SkillsNetwork-20127838&cm_mmca1=000026UJ&cm_mmca2=10006555&cm_mmca3=M12345678&cvosrc=email.Newsletter.M12345678&cvo_campaign=000026UJ[https://data.cityofchicago.org/Health-Human-Services/Census-Data-Selected-socioeconomic-indicators-in-C/kn9c-c2s2]
+
+==== 2. Chicago Public Schools
+
+This dataset shows all school level performance data used to create CPS
+School Report Cards for the 2011-2012 school year. This dataset is
+provided by the city of Chicago’s Data Portal.
+
+A detailed description of this dataset and the original dataset can be
+obtained from the Chicago Data Portal at:
+
+https://data.cityofchicago.org/Education/Chicago-Public-Schools-Progress-Report-Cards-2011-/9xs2-f89t?utm_medium=Exinfluencer&utm_source=Exinfluencer&utm_content=000026UJ&utm_term=10006555&utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMDeveloperSkillsNetworkDB0201ENSkillsNetwork20127838-2021-01-01&cm_mmc=Email_Newsletter-_-Developer_Ed%2BTech-_-WW_WW-_-SkillsNetwork-Courses-IBMDeveloperSkillsNetwork-DB0201EN-SkillsNetwork-20127838&cm_mmca1=000026UJ&cm_mmca2=10006555&cm_mmca3=M12345678&cvosrc=email.Newsletter.M12345678&cvo_campaign=000026UJ[https://data.cityofchicago.org/Education/Chicago-Public-Schools-Progress-Report-Cards-2011-/9xs2-f89t]
+
+==== 3. Chicago Crime Data
+
+This dataset reflects reported incidents of crime (with the exception of
+murders where data exists for each victim) that occurred in the City of
+Chicago from 2001 to present, minus the most recent seven days.
+
+A detailed description of this dataset and the original dataset can be
+obtained from the Chicago Data Portal at:
+
+https://data.cityofchicago.org/Public-Safety/Crimes-2001-to-present/ijzp-q8t2?utm_medium=Exinfluencer&utm_source=Exinfluencer&utm_content=000026UJ&utm_term=10006555&utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMDeveloperSkillsNetworkDB0201ENSkillsNetwork20127838-2021-01-01&cm_mmc=Email_Newsletter-_-Developer_Ed%2BTech-_-WW_WW-_-SkillsNetwork-Courses-IBMDeveloperSkillsNetwork-DB0201EN-SkillsNetwork-20127838&cm_mmca1=000026UJ&cm_mmca2=10006555&cm_mmca3=M12345678&cvosrc=email.Newsletter.M12345678&cvo_campaign=000026UJ[https://data.cityofchicago.org/Public-Safety/Crimes-2001-to-present/ijzp-q8t2]
+
+==== Download the datasets
+
+This assignment requires you to have these three tables populated with a
+subset of the whole datasets.
+
+In many cases the dataset to be analyzed is available as a .CSV (comma
+separated values) file, perhaps on the internet.
+
+Use the links below to read the data files using the Pandas library.
+
+* Chicago Census Data
+
+https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DB0201EN-SkillsNetwork/labs/FinalModule++_++Coursera++_++V5/data/ChicagoCensusData.csv?utm++_++medium=Exinfluencer&utm++_++source=Exinfluencer&utm++_++content=000026UJ&utm++_++term=10006555&utm++_++id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMDeveloperSkillsNetworkDB0201ENSkillsNetwork20127838-2021-01-01
+
+* Chicago Public Schools
+
+https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DB0201EN-SkillsNetwork/labs/FinalModule++_++Coursera++_++V5/data/ChicagoPublicSchools.csv?utm++_++medium=Exinfluencer&utm++_++source=Exinfluencer&utm++_++content=000026UJ&utm++_++term=10006555&utm++_++id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMDeveloperSkillsNetworkDB0201ENSkillsNetwork20127838-2021-01-01
+
+* Chicago Crime Data
+
+https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DB0201EN-SkillsNetwork/labs/FinalModule++_++Coursera++_++V5/data/ChicagoCrimeData.csv?utm++_++medium=Exinfluencer&utm++_++source=Exinfluencer&utm++_++content=000026UJ&utm++_++term=10006555&utm++_++id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMDeveloperSkillsNetworkDB0201ENSkillsNetwork20127838-2021-01-01
+
+*NOTE:* Ensure you use the datasets available on the links above instead
+of directly from the Chicago Data Portal. The versions linked here are
+subsets of the original datasets and have some of the column names
+modified to be more database friendly which will make it easier to
+complete this assignment.
+
+Execute the below code cell to install the required libraries
+
+
++*In[1]:*+
+[source, ipython3]
+----
+!pip install pandas
+!pip install ipython-sql prettytable 
+
+import prettytable
+
+prettytable.DEFAULT = 'DEFAULT'
+----
+
+
++*Out[1]:*+
+----
+Requirement already satisfied: pandas in /opt/conda/lib/python3.12/site-packages (2.3.0)
+Requirement already satisfied: numpy>=1.26.0 in /opt/conda/lib/python3.12/site-packages (from pandas) (2.3.1)
+Requirement already satisfied: python-dateutil>=2.8.2 in /opt/conda/lib/python3.12/site-packages (from pandas) (2.9.0.post0)
+Requirement already satisfied: pytz>=2020.1 in /opt/conda/lib/python3.12/site-packages (from pandas) (2024.2)
+Requirement already satisfied: tzdata>=2022.7 in /opt/conda/lib/python3.12/site-packages (from pandas) (2025.2)
+Requirement already satisfied: six>=1.5 in /opt/conda/lib/python3.12/site-packages (from python-dateutil>=2.8.2->pandas) (1.17.0)
+Requirement already satisfied: ipython-sql in /opt/conda/lib/python3.12/site-packages (0.5.0)
+Requirement already satisfied: prettytable in /opt/conda/lib/python3.12/site-packages (3.16.0)
+Requirement already satisfied: ipython in /opt/conda/lib/python3.12/site-packages (from ipython-sql) (8.31.0)
+Requirement already satisfied: sqlalchemy>=2.0 in /opt/conda/lib/python3.12/site-packages (from ipython-sql) (2.0.37)
+Requirement already satisfied: sqlparse in /opt/conda/lib/python3.12/site-packages (from ipython-sql) (0.5.3)
+Requirement already satisfied: six in /opt/conda/lib/python3.12/site-packages (from ipython-sql) (1.17.0)
+Requirement already satisfied: ipython-genutils in /opt/conda/lib/python3.12/site-packages (from ipython-sql) (0.2.0)
+Requirement already satisfied: wcwidth in /opt/conda/lib/python3.12/site-packages (from prettytable) (0.2.13)
+Requirement already satisfied: greenlet!=0.4.17 in /opt/conda/lib/python3.12/site-packages (from sqlalchemy>=2.0->ipython-sql) (3.1.1)
+Requirement already satisfied: typing-extensions>=4.6.0 in /opt/conda/lib/python3.12/site-packages (from sqlalchemy>=2.0->ipython-sql) (4.12.2)
+Requirement already satisfied: decorator in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (5.1.1)
+Requirement already satisfied: jedi>=0.16 in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (0.19.2)
+Requirement already satisfied: matplotlib-inline in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (0.1.7)
+Requirement already satisfied: pexpect>4.3 in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (4.9.0)
+Requirement already satisfied: prompt_toolkit<3.1.0,>=3.0.41 in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (3.0.50)
+Requirement already satisfied: pygments>=2.4.0 in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (2.19.1)
+Requirement already satisfied: stack_data in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (0.6.3)
+Requirement already satisfied: traitlets>=5.13.0 in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (5.14.3)
+Requirement already satisfied: parso<0.9.0,>=0.8.4 in /opt/conda/lib/python3.12/site-packages (from jedi>=0.16->ipython->ipython-sql) (0.8.4)
+Requirement already satisfied: ptyprocess>=0.5 in /opt/conda/lib/python3.12/site-packages (from pexpect>4.3->ipython->ipython-sql) (0.7.0)
+Requirement already satisfied: executing>=1.2.0 in /opt/conda/lib/python3.12/site-packages (from stack_data->ipython->ipython-sql) (2.1.0)
+Requirement already satisfied: asttokens>=2.1.0 in /opt/conda/lib/python3.12/site-packages (from stack_data->ipython->ipython-sql) (3.0.0)
+Requirement already satisfied: pure_eval in /opt/conda/lib/python3.12/site-packages (from stack_data->ipython->ipython-sql) (0.2.3)
+----
+
+==== Store the datasets in database tables
+
+To analyze the data using SQL, it first needs to be loaded into SQLite
+DB. We will create three tables in as under:
+
+[arabic]
+. *CENSUS++_++DATA*
+. *CHICAGO++_++PUBLIC++_++SCHOOLS*
+. *CHICAGO++_++CRIME++_++DATA*
+
+Load the `pandas` and `sqlite3` libraries and establish a connection to
+`FinalDB.db`
+
+
++*In[2]:*+
+[source, ipython3]
+----
+import csv, sqlite3
+
+con = sqlite3.connect("FinalDB.db")
+cur = con.cursor()
+
+!pip install pandas
+!pip install ipython-sql prettytable
+
+import prettytable
+prettytable.DEFAULT = 'DEFAULT'
+----
+
+
++*Out[2]:*+
+----
+Requirement already satisfied: pandas in /opt/conda/lib/python3.12/site-packages (2.3.0)
+Requirement already satisfied: numpy>=1.26.0 in /opt/conda/lib/python3.12/site-packages (from pandas) (2.3.1)
+Requirement already satisfied: python-dateutil>=2.8.2 in /opt/conda/lib/python3.12/site-packages (from pandas) (2.9.0.post0)
+Requirement already satisfied: pytz>=2020.1 in /opt/conda/lib/python3.12/site-packages (from pandas) (2024.2)
+Requirement already satisfied: tzdata>=2022.7 in /opt/conda/lib/python3.12/site-packages (from pandas) (2025.2)
+Requirement already satisfied: six>=1.5 in /opt/conda/lib/python3.12/site-packages (from python-dateutil>=2.8.2->pandas) (1.17.0)
+Requirement already satisfied: ipython-sql in /opt/conda/lib/python3.12/site-packages (0.5.0)
+Requirement already satisfied: prettytable in /opt/conda/lib/python3.12/site-packages (3.16.0)
+Requirement already satisfied: ipython in /opt/conda/lib/python3.12/site-packages (from ipython-sql) (8.31.0)
+Requirement already satisfied: sqlalchemy>=2.0 in /opt/conda/lib/python3.12/site-packages (from ipython-sql) (2.0.37)
+Requirement already satisfied: sqlparse in /opt/conda/lib/python3.12/site-packages (from ipython-sql) (0.5.3)
+Requirement already satisfied: six in /opt/conda/lib/python3.12/site-packages (from ipython-sql) (1.17.0)
+Requirement already satisfied: ipython-genutils in /opt/conda/lib/python3.12/site-packages (from ipython-sql) (0.2.0)
+Requirement already satisfied: wcwidth in /opt/conda/lib/python3.12/site-packages (from prettytable) (0.2.13)
+Requirement already satisfied: greenlet!=0.4.17 in /opt/conda/lib/python3.12/site-packages (from sqlalchemy>=2.0->ipython-sql) (3.1.1)
+Requirement already satisfied: typing-extensions>=4.6.0 in /opt/conda/lib/python3.12/site-packages (from sqlalchemy>=2.0->ipython-sql) (4.12.2)
+Requirement already satisfied: decorator in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (5.1.1)
+Requirement already satisfied: jedi>=0.16 in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (0.19.2)
+Requirement already satisfied: matplotlib-inline in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (0.1.7)
+Requirement already satisfied: pexpect>4.3 in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (4.9.0)
+Requirement already satisfied: prompt_toolkit<3.1.0,>=3.0.41 in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (3.0.50)
+Requirement already satisfied: pygments>=2.4.0 in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (2.19.1)
+Requirement already satisfied: stack_data in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (0.6.3)
+Requirement already satisfied: traitlets>=5.13.0 in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (5.14.3)
+Requirement already satisfied: parso<0.9.0,>=0.8.4 in /opt/conda/lib/python3.12/site-packages (from jedi>=0.16->ipython->ipython-sql) (0.8.4)
+Requirement already satisfied: ptyprocess>=0.5 in /opt/conda/lib/python3.12/site-packages (from pexpect>4.3->ipython->ipython-sql) (0.7.0)
+Requirement already satisfied: executing>=1.2.0 in /opt/conda/lib/python3.12/site-packages (from stack_data->ipython->ipython-sql) (2.1.0)
+Requirement already satisfied: asttokens>=2.1.0 in /opt/conda/lib/python3.12/site-packages (from stack_data->ipython->ipython-sql) (3.0.0)
+Requirement already satisfied: pure_eval in /opt/conda/lib/python3.12/site-packages (from stack_data->ipython->ipython-sql) (0.2.3)
+----
+
+Load the SQL magic module
+
+
++*In[3]:*+
+[source, ipython3]
+----
+!pip install ipython-sql
+%load_ext sql
+%sql sqlite:///FinalDB.db
+----
+
+
++*Out[3]:*+
+----
+Requirement already satisfied: ipython-sql in /opt/conda/lib/python3.12/site-packages (0.5.0)
+Requirement already satisfied: prettytable in /opt/conda/lib/python3.12/site-packages (from ipython-sql) (3.16.0)
+Requirement already satisfied: ipython in /opt/conda/lib/python3.12/site-packages (from ipython-sql) (8.31.0)
+Requirement already satisfied: sqlalchemy>=2.0 in /opt/conda/lib/python3.12/site-packages (from ipython-sql) (2.0.37)
+Requirement already satisfied: sqlparse in /opt/conda/lib/python3.12/site-packages (from ipython-sql) (0.5.3)
+Requirement already satisfied: six in /opt/conda/lib/python3.12/site-packages (from ipython-sql) (1.17.0)
+Requirement already satisfied: ipython-genutils in /opt/conda/lib/python3.12/site-packages (from ipython-sql) (0.2.0)
+Requirement already satisfied: greenlet!=0.4.17 in /opt/conda/lib/python3.12/site-packages (from sqlalchemy>=2.0->ipython-sql) (3.1.1)
+Requirement already satisfied: typing-extensions>=4.6.0 in /opt/conda/lib/python3.12/site-packages (from sqlalchemy>=2.0->ipython-sql) (4.12.2)
+Requirement already satisfied: decorator in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (5.1.1)
+Requirement already satisfied: jedi>=0.16 in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (0.19.2)
+Requirement already satisfied: matplotlib-inline in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (0.1.7)
+Requirement already satisfied: pexpect>4.3 in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (4.9.0)
+Requirement already satisfied: prompt_toolkit<3.1.0,>=3.0.41 in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (3.0.50)
+Requirement already satisfied: pygments>=2.4.0 in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (2.19.1)
+Requirement already satisfied: stack_data in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (0.6.3)
+Requirement already satisfied: traitlets>=5.13.0 in /opt/conda/lib/python3.12/site-packages (from ipython->ipython-sql) (5.14.3)
+Requirement already satisfied: wcwidth in /opt/conda/lib/python3.12/site-packages (from prettytable->ipython-sql) (0.2.13)
+Requirement already satisfied: parso<0.9.0,>=0.8.4 in /opt/conda/lib/python3.12/site-packages (from jedi>=0.16->ipython->ipython-sql) (0.8.4)
+Requirement already satisfied: ptyprocess>=0.5 in /opt/conda/lib/python3.12/site-packages (from pexpect>4.3->ipython->ipython-sql) (0.7.0)
+Requirement already satisfied: executing>=1.2.0 in /opt/conda/lib/python3.12/site-packages (from stack_data->ipython->ipython-sql) (2.1.0)
+Requirement already satisfied: asttokens>=2.1.0 in /opt/conda/lib/python3.12/site-packages (from stack_data->ipython->ipython-sql) (3.0.0)
+Requirement already satisfied: pure_eval in /opt/conda/lib/python3.12/site-packages (from stack_data->ipython->ipython-sql) (0.2.3)
+----
+
+Use `Pandas` to load the data available in the links above to
+dataframes. Use these dataframes to load data on to the database
+`FinalDB.db` as required tables.
+
+
++*In[4]:*+
+[source, ipython3]
+----
+import pandas
+
+df_census = pandas.read_csv("https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DB0201EN-SkillsNetwork/labs/FinalModule_Coursera_V5/data/ChicagoCensusData.csv")
+df_census.to_sql("census_data", con, if_exists='replace', index=False, method="multi")
+
+df_cps = pandas.read_csv("https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DB0201EN-SkillsNetwork/labs/FinalModule_Coursera_V5/data/ChicagoPublicSchools.csv")
+df_cps.to_sql("cps_data", con, if_exists='replace', index=False, method="multi")
+
+df_crime = pandas.read_csv("https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DB0201EN-SkillsNetwork/labs/FinalModule_Coursera_V5/data/ChicagoCrimeData.csv")
+df_crime.to_sql("crime_data", con, if_exists='replace', index=False, method="multi")
+
+----
+
+
++*Out[4]:*+
+----533----
+
+Establish a connection between SQL magic module and the database
+`FinalDB.db`
+
+
++*In[5]:*+
+[source, ipython3]
+----
+%sql sqlite:///FinalDB.db
+%sql select name from sqlite_master where type='table'
+----
+
+
++*Out[5]:*+
+----
+ * sqlite:///FinalDB.db
+Done.
+
+[cols="",options="header",]
+|===
+|name
+|census++_++data
+|cps++_++data
+|crime++_++data
+|===
+----
+
+
++*In[40]:*+
+[source, ipython3]
+----
+%sql select name from PRAGMA_TABLE_INFO('crime_data');
+----
+
+
++*Out[40]:*+
+----
+ * sqlite:///FinalDB.db
+Done.
+
+[cols="",options="header",]
+|===
+|name
+|ID
+|CASE++_++NUMBER
+|DATE
+|BLOCK
+|IUCR
+|PRIMARY++_++TYPE
+|DESCRIPTION
+|LOCATION++_++DESCRIPTION
+|ARREST
+|DOMESTIC
+|BEAT
+|DISTRICT
+|WARD
+|COMMUNITY++_++AREA++_++NUMBER
+|FBICODE
+|X++_++COORDINATE
+|Y++_++COORDINATE
+|YEAR
+|LATITUDE
+|LONGITUDE
+|LOCATION
+|===
+----
+
+You can now proceed to the the following questions. Please note that a
+graded assignment will follow this lab and there will be a question on
+each of the problems stated below. It can be from the answer you
+received or the code you write for this problem. Therefore, please keep
+a note of both your codes as well as the response you generate.
+
+=== Problems
+
+Now write and execute SQL queries to solve assignment problems
+
+==== Problem 1
+
+====== Find the total number of crimes recorded in the CRIME table.
+
+
++*In[7]:*+
+[source, ipython3]
+----
+%sql select count(*) from crime_data;
+----
+
+
++*Out[7]:*+
+----
+ * sqlite:///FinalDB.db
+Done.
+
+[cols="",options="header",]
+|===
+|count(++*++)
+|533
+|===
+----
+
+==== Problem 2
+
+====== List community area names and numbers with per capita income less than 11000.
+
+
++*In[9]:*+
+[source, ipython3]
+----
+%sql select COMMUNITY_AREA_NAME from census_data where PER_CAPITA_INCOME < 11000;
+----
+
+
++*Out[9]:*+
+----
+ * sqlite:///FinalDB.db
+Done.
+
+[cols="",options="header",]
+|===
+|COMMUNITY++_++AREA++_++NAME
+|West Garfield Park
+|South Lawndale
+|Fuller Park
+|Riverdale
+|===
+----
+
+==== Problem 3
+
+====== List all case numbers for crimes involving minors?(children are not considered minors for the purposes of crime analysis)
+
+
++*In[11]:*+
+[source, ipython3]
+----
+%sql select CASE_NUMBER from crime_data where PRIMARY_TYPE = 'OFFENSE INVOLVING CHILDREN';
+----
+
+
++*Out[11]:*+
+----
+ * sqlite:///FinalDB.db
+Done.
+
+[cols="",options="header",]
+|===
+|CASE++_++NUMBER
+|HN567387
+|HR391350
+|HM768251
+|HT394616
+|===
+----
+
+==== Problem 4
+
+====== List all kidnapping crimes involving a child?
+
+
++*In[12]:*+
+[source, ipython3]
+----
+%sql select CASE_NUMBER, DESCRIPTION from crime_data where PRIMARY_TYPE = 'KIDNAPPING';
+----
+
+
++*Out[12]:*+
+----
+ * sqlite:///FinalDB.db
+Done.
+
+[cols=",",options="header",]
+|===
+|CASE++_++NUMBER |DESCRIPTION
+|HN144152 |CHILD ABDUCTION/STRANGER
+|===
+----
+
+==== Problem 5
+
+====== List the kind of crimes that were recorded at schools. (No repetitions)
+
+
++*In[18]:*+
+[source, ipython3]
+----
+%sql select distinct PRIMARY_TYPE from crime_data where upper(LOCATION_DESCRIPTION) like '%SCHOOL%';
+----
+
+
++*Out[18]:*+
+----
+ * sqlite:///FinalDB.db
+Done.
+
+[cols="",options="header",]
+|===
+|PRIMARY++_++TYPE
+|BATTERY
+|CRIMINAL DAMAGE
+|NARCOTICS
+|ASSAULT
+|CRIMINAL TRESPASS
+|PUBLIC PEACE VIOLATION
+|===
+----
+
+==== Problem 6
+
+====== List the type of schools along with the average safety score for each type.
+
+
++*In[25]:*+
+[source, ipython3]
+----
+%sql select "Elementary, Middle, or High School" as school_type, avg(SAFETY_SCORE) from cps_data group by school_type;
+----
+
+
++*Out[25]:*+
+----
+ * sqlite:///FinalDB.db
+Done.
+
+[cols=",",options="header",]
+|===
+|school++_++type |avg(SAFETY++_++SCORE)
+|ES |49.52038369304557
+|HS |49.62352941176471
+|MS |48.0
+|===
+----
+
+==== Problem 7
+
+====== List 5 community areas with highest % of households below poverty line
+
+
++*In[29]:*+
+[source, ipython3]
+----
+%sql select COMMUNITY_AREA_NAME, PERCENT_HOUSEHOLDS_BELOW_POVERTY from census_data order by PERCENT_HOUSEHOLDS_BELOW_POVERTY desc limit 5;
+----
+
+
++*Out[29]:*+
+----
+ * sqlite:///FinalDB.db
+Done.
+
+[cols=",",options="header",]
+|===
+|COMMUNITY++_++AREA++_++NAME
+|PERCENT++_++HOUSEHOLDS++_++BELOW++_++POVERTY
+|Riverdale |56.5
+
+|Fuller Park |51.2
+
+|Englewood |46.6
+
+|North Lawndale |43.1
+
+|East Garfield Park |42.4
+|===
+----
+
+==== Problem 8
+
+====== Which community area is most crime prone? Display the coumminty area number only.
+
+
++*In[35]:*+
+[source, ipython3]
+----
+%sql SELECT COMMUNITY_AREA_NUMBER, COUNT(CASE_NUMBER) AS case_count \
+FROM crime_data \
+GROUP BY COMMUNITY_AREA_NUMBER \
+ORDER BY case_count DESC limit 1;
+
+----
+
+
++*Out[35]:*+
+----
+ * sqlite:///FinalDB.db
+Done.
+
+[cols=",",options="header",]
+|===
+|COMMUNITY++_++AREA++_++NUMBER |case++_++count
+|25.0 |43
+|===
+----
+
+Double-click *here* for a hint
+
+==== Problem 9
+
+====== Use a sub-query to find the name of the community area with highest hardship index
+
+
++*In[39]:*+
+[source, ipython3]
+----
+%sql select COMMUNITY_AREA_NAME from census_data where HARDSHIP_INDEX = (select max(HARDSHIP_INDEX) from census_data);
+----
+
+
++*Out[39]:*+
+----
+ * sqlite:///FinalDB.db
+Done.
+
+[cols="",options="header",]
+|===
+|COMMUNITY++_++AREA++_++NAME
+|Riverdale
+|===
+----
+
+==== Problem 10
+
+====== Use a sub-query to determine the Community Area Name with most number of crimes?
+
+
++*In[43]:*+
+[source, ipython3]
+----
+%sql SELECT a.COMMUNITY_AREA_NAME, COUNT(b.CASE_NUMBER) AS crime_count \
+FROM census_data a \
+LEFT JOIN crime_data b \
+  ON a.COMMUNITY_AREA_NUMBER = b.COMMUNITY_AREA_NUMBER \
+GROUP BY a.COMMUNITY_AREA_NAME \
+ORDER BY crime_count DESC \
+LIMIT 5;
+----
+
+
++*Out[43]:*+
+----
+ * sqlite:///FinalDB.db
+Done.
+
+[cols=",",options="header",]
+|===
+|COMMUNITY++_++AREA++_++NAME |crime++_++count
+|Austin |43
+|Humboldt park |22
+|Englewood |21
+|North Lawndale |16
+|Near West Side |16
+|===
+----
+
+
++*In[45]:*+
+[source, ipython3]
+----
+#q10 performed as a sub-query
+%sql SELECT c.COMMUNITY_AREA_NAME, sub.crime_count \
+FROM census_data c \
+LEFT JOIN ( \
+    SELECT COMMUNITY_AREA_NUMBER, COUNT(CASE_NUMBER) AS crime_count \
+    FROM crime_data \
+    GROUP BY COMMUNITY_AREA_NUMBER \
+) sub \
+ON c.COMMUNITY_AREA_NUMBER = sub.COMMUNITY_AREA_NUMBER \
+ORDER BY sub.crime_count DESC \
+LIMIT 5;
+----
+
+
++*Out[45]:*+
+----
+ * sqlite:///FinalDB.db
+Done.
+
+[cols=",",options="header",]
+|===
+|COMMUNITY++_++AREA++_++NAME |crime++_++count
+|Austin |43
+|Humboldt park |22
+|Englewood |21
+|Near West Side |16
+|North Lawndale |16
+|===
+----
+
+=== Author(s)
+
+Hima Vasudevan
+
+Rav Ahuja
+
+Ramesh Sannreddy
+
+=== Contribtuor(s)
+
+Malika Singla
+
+Abhishek Gagneja
+
+##
+
+© IBM Corporation 2023. All rights reserved.
